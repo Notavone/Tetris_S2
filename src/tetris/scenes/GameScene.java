@@ -1,7 +1,7 @@
 package tetris.scenes;
 
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import tetris.Model;
 import tetris.application.Case;
@@ -10,7 +10,7 @@ import tetris.save.Save;
 
 import java.util.ArrayList;
 
-public class GameScene extends BorderPane {
+public class GameScene extends VBox {
     private final Model model;
     private final Save save;
     ArrayList<Case> nouv = new ArrayList<>();
