@@ -1,0 +1,42 @@
+.generalButton {
+    -fx-background-color: black;
+    -fx-text-fill: white;
+    -fx-font-size: 30px;
+    -fx-padding: 30px;
+    -fx-border-insets: 5px;
+    -fx-background-insets: 5px;
+    -fx-min-width: 300px;
+}
+
+.bold {
+    -fx-font-weight: bold;
+}
+
+.big {
+    -fx-font-size: 1.5em;
+}
+
+.tScores {
+    -fx-background-color: paleturquoise;
+    -fx-fill-widht: true;
+    -fx-alignment: center;
+
+    -fx-padding: 30px;
+    -fx-border-insets: 5px;
+    -fx-background-insets: 5px;
+}
+
+.tScores > * {
+    -fx-fill: #0e450e;
+    -fx-font-size: 1.2em;
+}
+
+.spacer {
+    -fx-padding: 20px;
+    -fx-border-insets: 20px;
+    -fx-background-insets: 20px;
+}
+
+.vBoxScore {
+    -fx-alignment: center;
+}
