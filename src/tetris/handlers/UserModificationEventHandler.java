@@ -7,7 +7,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import tetris.Model;
+import tetris.application.Model;
 import tetris.save.Save;
 import tetris.scenes.HomeScene;
 
@@ -48,8 +48,7 @@ public class UserModificationEventHandler implements EventHandler<ActionEvent> {
         for (int i = 0; i < Math.min(saves.size(), Save.MAX_NUMBER_OF_SAVE); i++) {
             Save save = saves.get(i);
 
-            int score = save.getScore();
-            Text scoreText = new Text(score >= 1000 ? (score / 1000)+ "k" : String.valueOf(score));
+            Text scoreText = new Text(save.getScore());
             scoreText.getStyleClass().add("bold");
             Text dateText = new Text(save.getDate());
             dateText.getStyleClass().add("bold");

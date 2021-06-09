@@ -9,7 +9,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
-import tetris.Model;
+import tetris.application.Model;
 import java.util.Objects;
 
 public class HomeScene extends VBox {
@@ -21,21 +21,14 @@ public class HomeScene extends VBox {
     private final Button confirmUserChangeButton;
     private final Button playButton;
     private final Button exitButton;
-    private final Slider volumeSlider;
 
-    public HomeScene(Model model) {
+    public HomeScene(Model model, Slider volumeSlider) {
         this.getStylesheets().add(Objects.requireNonNull(getClass().getResource("stylesheet.css")).toExternalForm());
 
         this.userDisplay = new Text(model.getPlayer());
         this.scorePanel = new VBox();
         this.changeUserButton = new Button("Modifier");
         this.confirmUserChangeButton = new Button("Valider");
-
-        this.volumeSlider = new Slider(0, 100, 50);
-        volumeSlider.setBlockIncrement(5);
-        volumeSlider.setMinorTickCount(2);
-        volumeSlider.setMajorTickUnit(20);
-        volumeSlider.setShowTickMarks(true);
 
         this.userNameInput = new TextField();
         userNameInput.setPromptText("Nouvel utilisateur");
@@ -95,10 +88,6 @@ public class HomeScene extends VBox {
 
     public Button getPlayButton() {
         return playButton;
-    }
-
-    public Slider getVolumeSlider() {
-        return volumeSlider;
     }
 
     public Button getExitButton() {

@@ -1,9 +1,11 @@
-package tetris;
+package tetris.application;
 
 import tetris.save.FileSystem;
 import tetris.save.Parser;
 import tetris.save.Save;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 public class Model {
@@ -30,5 +32,12 @@ public class Model {
 
     public List<Save> getPlayerSaves() {
         return Save.filterByUserName(saves, player);
+    }
+
+    public Save getSave() {
+        Date date = new Date();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
+        return new Save(player, 0, dateFormat.format(date), timeFormat.format(date));
     }
 }

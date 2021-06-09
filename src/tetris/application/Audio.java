@@ -1,4 +1,4 @@
-package tetris;
+package tetris.application;
 
 import javax.sound.sampled.*;
 import java.io.File;

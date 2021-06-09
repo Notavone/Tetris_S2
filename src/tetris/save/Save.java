@@ -46,8 +46,8 @@ public class Save implements Comparable<Save> {
         return name;
     }
 
-    public int getScore() {
-        return score;
+    public String getScore() {
+        return score >= 1000 ? (score / 1000)+ "k" : String.valueOf(score);
     }
 
     public String getDate() {
