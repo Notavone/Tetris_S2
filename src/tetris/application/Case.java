@@ -82,7 +82,7 @@ public class Case extends Parent{
 			halfCircle.setType(ArcType.ROUND);
 			halfCircle.setRotate(180.0);
 
-			square.setFill(Color.GRAY);
+			square.setFill(couleur);
 			square.setOpacity((55.0 / 62.0 - ((double) Y + 30.0) / ((double) GameScene.LIGNES + 50)));
 
 			cellGroup.getChildren().addAll(square, topShade, bottomShade, halfCircle, topRec);

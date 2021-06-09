@@ -41,6 +41,7 @@ public class GameScene extends VBox {
     ArrayList<Case> pose = new ArrayList<>();
 
     GridPane grille;
+    GridPane previewGrid;
 
     public static final int COLONNES = 10;
     public static final int LIGNES = 20;
@@ -77,7 +78,7 @@ public class GameScene extends VBox {
 
         for (int i = 0; i < COLONNES; i++) {
             for (int j = 0; j < LIGNES; j++) {
-                grille.add(new Case(i, j, Color.rgb(75, 75, 75), true), i, j);
+                grille.add(new Case(i, j, Color.GRAY, true), i, j);
             }
         }
 
@@ -85,6 +86,8 @@ public class GameScene extends VBox {
 
         HBox topPanel = new HBox(new Text("Tetris"));
         topPanel.getStyleClass().add("title");
+
+        previewGrid = new GridPane();
 
         VBox bottomSidePanel = new VBox();
         bottomSidePanel.getStyleClass().add("background");

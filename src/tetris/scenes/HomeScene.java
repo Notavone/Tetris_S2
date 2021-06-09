@@ -24,11 +24,15 @@ public class HomeScene extends VBox {
 
     public HomeScene(Model model, Slider volumeSlider) {
         this.getStylesheets().add(Objects.requireNonNull(getClass().getResource("stylesheet.css")).toExternalForm());
+        getStyleClass().add("background");
 
         this.userDisplay = new Text(model.getPlayer());
+        userDisplay.getStyleClass().add("lbl");
         this.scorePanel = new VBox();
         this.changeUserButton = new Button("Modifier");
+        changeUserButton.getStyleClass().add("btnUser");
         this.confirmUserChangeButton = new Button("Valider");
+        confirmUserChangeButton.getStyleClass().add("btnUser");
 
         this.userNameInput = new TextField();
         userNameInput.setPromptText("Nouvel utilisateur");
@@ -46,7 +50,9 @@ public class HomeScene extends VBox {
         modificationPanel.setVisible(false);
 
         ImageView userImage = new ImageView(new Image("file:icon/user.png"));
-        HBox userPanel = new HBox(userImage, new Text("Utilisateur : "), userDisplay, changeUserButton);
+        Text lblUser = new Text("Utilisateur : ");
+        lblUser.getStyleClass().add("lblBold");
+        HBox userPanel = new HBox(userImage, lblUser, userDisplay, changeUserButton);
         userPanel.setSpacing(10);
         userPanel.getStyleClass().add("spacer");
         userPanel.setAlignment(Pos.CENTER);
@@ -54,7 +60,10 @@ public class HomeScene extends VBox {
         HBox userPane = new HBox(userPanel, modificationPanel);
         scorePanel.getStyleClass().add("vBoxScore");
 
-        HBox volumePanel = new HBox(new Text("Volume :"), volumeSlider);
+        Text lblVolume = new Text("Volume : ");
+        lblVolume.getStyleClass().add("lblBold");
+        HBox volumePanel = new HBox(lblVolume, volumeSlider);
+        volumePanel.setStyle("-fx-padding: 30 0 15 10");
 
         VBox vBoxBoutons = new VBox(playButton, exitButton, volumePanel);
         vBoxBoutons.setAlignment(Pos.CENTER);

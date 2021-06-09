@@ -5,6 +5,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Slider;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import tetris.application.Audio;
 import tetris.application.Model;
 import tetris.handlers.UserModificationEventHandler;
@@ -30,12 +31,11 @@ public class Main extends Application {
         stage.setTitle("Tetris");
         stage.setResizable(false);
 
-
         Slider volumeSlider = new Slider(0, 100, 50);
         volumeSlider.setBlockIncrement(5);
         volumeSlider.setMinorTickCount(2);
         volumeSlider.setMajorTickUnit(20);
-        volumeSlider.setShowTickMarks(true);
+        volumeSlider.getStyleClass().add("sliderHome");
 
         HomeScene homeScene = new HomeScene(model, volumeSlider);
         Scene scene = new Scene(homeScene);
@@ -52,6 +52,8 @@ public class Main extends Application {
         homeScene.getPlayButton().setOnAction(ignored -> {
             audio.setLoopPoint(Audio.GAME_LOOP);
             GameScene gameScene = new GameScene(model, scene, volumeSlider, audio);
+            volumeSlider.getStyleClass().remove("sliderHome");
+            volumeSlider.getStyleClass().add("sliderGame");
             scene.setRoot(gameScene);
             stage.sizeToScene();
         });

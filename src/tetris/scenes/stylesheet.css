@@ -1,15 +1,29 @@
 .generalButton {
-    -fx-background-color: black;
+    -fx-background-color: rgb(40, 96, 177);
     -fx-text-fill: white;
     -fx-font-size: 30px;
-    -fx-padding: 30px;
+    -fx-padding: 20px;
     -fx-border-insets: 5px;
     -fx-background-insets: 5px;
     -fx-min-width: 300px;
 }
 
+.btnUser {
+    -fx-background-color: rgb(40, 96, 177);
+    -fx-text-fill: rgb(255, 255, 255)
+}
+
+.lblBold {
+    -fx-fill: rgb(190, 190, 190);
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-font-family: "Segoe UI";
+    -fx-padding: 0 0 15px 0;
+}
+
 .bold {
     -fx-font-weight: bold;
+    -fx-fill: rgb(190, 190, 190);
 }
 
 .big {
@@ -17,7 +31,7 @@
 }
 
 .tScores {
-    -fx-background-color: paleturquoise;
+    -fx-background-color: rgb(161, 184, 229);
     -fx-fill-widht: true;
     -fx-alignment: center;
 
@@ -27,7 +41,7 @@
 }
 
 .tScores > * {
-    -fx-fill: #0e450e;
+    -fx-fill: rgb(34, 48, 69);
     -fx-font-size: 1.2em;
 }
 
@@ -63,4 +77,25 @@
     -fx-font-size: 15px;
     -fx-font-family: "Segoe UI Semilight";
     -fx-padding: 0 0 15px 0;
+}
+
+.sliderHome {
+    -fx-padding: 4 0 10 5;
+}
+
+.sliderGame {
+    -fx-padding: 10 0 0 0;
+}
+
+.slider .thumb {
+    -fx-background-color: rgb(40, 96, 177);
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.8), 8, 0, 0, 0);
+}
+
+.slider .track {
+    -fx-background-color: rgb(255, 255, 255);
+}
+
+.menu-bar {
+    -fx-background-color: derive(#FF1d1d,20%); // your color here
 }
