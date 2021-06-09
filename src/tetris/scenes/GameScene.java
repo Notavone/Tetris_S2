@@ -229,6 +229,7 @@ public class GameScene extends VBox {
         save.incrementScore(nblignes, multiplicateur);
         scoreField.setText(save.getScore());
         levelField.setText(String.valueOf(linesCleared));
+        multiplicateurField.setText(String.valueOf(multiplicateur));
     }
 
     public ArrayList<Case> nouvCases() {
