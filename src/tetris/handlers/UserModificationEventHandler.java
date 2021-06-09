@@ -17,25 +17,28 @@ import java.util.List;
 public class UserModificationEventHandler implements EventHandler<ActionEvent> {
     private final Stage stage;
     private final Model model;
-    private final TextField userInput;
-    private final Text userDisplayText;
-    private final HBox modificationBox;
-    private final VBox scoreBox;
+    private final HomeScene scene;
 
     public UserModificationEventHandler(Model model, Stage stage, HomeScene scene) {
         this.model = model;
         this.stage = stage;
-        this.userInput = scene.getUserNameInput();
-        this.userDisplayText = scene.getUserDisplay();
-        this.modificationBox = scene.getModificationPanel();
-        this.scoreBox = scene.getScorePanel();
+        this.scene = scene;
     }
 
     @Override
     public void handle(ActionEvent event) {
+        TextField userInput = scene.getUserNameInput();
         String user = userInput.getText();
-        userDisplayText.setText(user);
         model.setPlayer(user);
+        loadSaves(model, stage, scene);
+    }
+
+    public static void loadSaves(Model model, Stage stage, HomeScene scene) {
+        Text userDisplayText = scene.getUserDisplay();
+        HBox modificationBox = scene.getModificationPanel();
+        VBox scoreBox = scene.getScorePanel();
+
+        userDisplayText.setText(model.getPlayer());
         modificationBox.setVisible(false);
 
         scoreBox.getChildren().clear();
@@ -54,9 +57,9 @@ public class UserModificationEventHandler implements EventHandler<ActionEvent> {
             dateText.getStyleClass().add("bold");
             Text heureText = new Text(save.getHeure());
             heureText.getStyleClass().add("bold");
-            HBox scoreBox = new HBox(new Text((i + 1) + ". "), scoreText, new Text(" le "), dateText, new Text(" à "), heureText);
-            scoreBox.getStyleClass().add("tScores");
-            this.scoreBox.getChildren().add(scoreBox);
+            HBox scores = new HBox(new Text((i + 1) + ". "), scoreText, new Text(" le "), dateText, new Text(" à "), heureText);
+            scores.getStyleClass().add("tScores");
+            scoreBox.getChildren().add(scores);
         }
 
         if (saves.size() == 0) {

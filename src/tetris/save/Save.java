@@ -1,5 +1,6 @@
 package tetris.save;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -9,11 +10,11 @@ public class Save implements Comparable<Save> {
     public static final int MAX_NUMBER_OF_SAVE = 5;
     public static final String JSON_EMPTY = "{saves:[]}";
     private final String name;
-    private int score;
+    private double score;
     private final String date;
     private final String heure;
 
-    public Save(String name, int score, String date, String heure) {
+    public Save(String name, double score, String date, String heure) {
         this.name = name;
         this.score = score;
         this.date = date;
@@ -47,7 +48,8 @@ public class Save implements Comparable<Save> {
     }
 
     public String getScore() {
-        return score >= 1000 ? (score / 1000)+ "k" : String.valueOf(score);
+        DecimalFormat format = new DecimalFormat("#######0.0");
+        return score >= 1000 ? format.format(score / 1000)+ "k" : String.valueOf((int) score);
     }
 
     public String getDate() {
@@ -79,6 +81,6 @@ public class Save implements Comparable<Save> {
 
     @Override
     public int compareTo(Save that) {
-        return Integer.compare(this.score, that.score);
+        return Double.compare(this.score, that.score);
     }
 }

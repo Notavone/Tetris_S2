@@ -8,12 +8,14 @@ import javafx.stage.Stage;
 import tetris.application.Audio;
 import tetris.application.Model;
 import tetris.handlers.UserModificationEventHandler;
+import tetris.save.Save;
 import tetris.scenes.GameScene;
 import tetris.scenes.HomeScene;
 
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import java.io.IOException;
+import java.util.List;
 
 
 public class Main extends Application {
@@ -35,10 +37,15 @@ public class Main extends Application {
         volumeSlider.setMajorTickUnit(20);
         volumeSlider.setShowTickMarks(true);
 
-
         HomeScene homeScene = new HomeScene(model, volumeSlider);
-
         Scene scene = new Scene(homeScene);
+
+        List<Save> saves = model.getSaves();
+        if(saves.size() > 0) {
+            model.setPlayer(saves.get(saves.size() - 1).getName());
+            UserModificationEventHandler.loadSaves(model, stage, homeScene);
+        }
+
         Audio audio = new Audio("soundtrack.wav");
 
         homeScene.getExitButton().setOnAction(ignored -> stage.close());
