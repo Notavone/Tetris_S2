@@ -17,7 +17,7 @@ public class Case extends Parent{
 		emplacementX = X;
 		emplacementY = Y;
 
-		Rectangle fond = new Rectangle(0, 0, 20, 20);
+		Rectangle fond = new Rectangle(0, 0, 35, 35);
 		fond.setFill(couleur);
 		
 		this.getChildren().add(fond);

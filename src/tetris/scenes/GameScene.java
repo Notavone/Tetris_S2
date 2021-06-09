@@ -20,7 +20,7 @@ public class GameScene extends VBox {
     GridPane grille;
 
     public static final int COLONNES = 10;
-    public static final int LIGNES = 18;
+    public static final int LIGNES = 20;
 
     public GameScene(Model model) {
         this.model = model;
@@ -28,8 +28,6 @@ public class GameScene extends VBox {
         this.save = new Save(model.getPlayer(), 0, "", "");
         grille.setVgap(1);
         grille.setHgap(1);
-        grille.setTranslateX(100);
-        grille.setTranslateY(100);
 
         for (int i = 0; i < COLONNES; i++) {
             for (int j = 0; j < LIGNES; j++) {

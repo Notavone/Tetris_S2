@@ -24,6 +24,7 @@ public class Main extends Application {
         Model model = new Model();
         stage.getIcons().add(new Image("file:icon/tetris.png"));
         stage.setTitle("Tetris");
+        stage.setResizable(false);
 
         HomeScene homeScene = new HomeScene(model);
         Scene scene = new Scene(homeScene);
@@ -34,6 +35,7 @@ public class Main extends Application {
             audio.setLoopPoint(Audio.GAME_LOOP);
             GameScene gameScene = new GameScene(model);
             scene.setRoot(gameScene);
+            stage.sizeToScene();
             new Jeu(gameScene, scene);
         });
         homeScene.getChangeUserButton().setOnAction(ignored -> homeScene.getModificationPanel().setVisible(true));
