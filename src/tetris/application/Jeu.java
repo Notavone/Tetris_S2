@@ -11,6 +11,9 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
+import tetris.save.FileSystem;
+import tetris.save.Parser;
+import tetris.save.Save;
 import tetris.scenes.GameScene;
 
 public class Jeu {
@@ -18,13 +21,16 @@ public class Jeu {
     Boolean perdu = false;
     Scene scene;
     Timeline play;
+    Timeline normal;
     Text perduText;
+    Timeline perduTest;
 
     Formes form;
 
     boolean droite = false;
     boolean gauche = false;
     boolean bas = false;
+    boolean isSaved = false;
 
     Timeline go;
 
@@ -72,14 +78,29 @@ public class Jeu {
         }));
         play.setCycleCount(Timeline.INDEFINITE);
         play.play();
+
+        perduTest = new Timeline(new KeyFrame(Duration.millis(10), ignored -> {
+            if (perdu) {
+                play.stop();
+                go.stop();
+            }
+        }));
+        perduTest.setCycleCount(Timeline.INDEFINITE);
+        perduTest.play();
+
     }
 
     public void commande() {
-        Timeline normal = new Timeline(new KeyFrame(Duration.millis(1000), ignored -> {
+        normal = new Timeline(new KeyFrame(Duration.millis(1000), ignored -> {
             if (!perdu) {
                 plateau.nouvForme().bas(plateau);
             } else {
-                perduText.setVisible(true);
+                if (!isSaved) {
+                    perduText.setVisible(true);
+                    Save.persist(plateau.getModel().getSaves(), plateau.getSave());
+                    FileSystem.save(Parser.stringify(plateau.getModel().getSaves()));
+                    isSaved = true;
+                }
             }
 
         }));

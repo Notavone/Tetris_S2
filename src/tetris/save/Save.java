@@ -9,7 +9,7 @@ public class Save implements Comparable<Save> {
     public static final int MAX_NUMBER_OF_SAVE = 5;
     public static final String JSON_EMPTY = "{saves:[]}";
     private final String name;
-    private final int score;
+    private int score;
     private final String date;
     private final String heure;
 
@@ -56,6 +56,15 @@ public class Save implements Comparable<Save> {
 
     public String getHeure() {
         return heure;
+    }
+
+    public void incrementScore(int nbLigne) {
+        switch (nbLigne){
+            case 1 -> score += 40;
+            case 2 -> score += 100;
+            case 3 -> score += 300;
+            case 4 -> score += 1200;
+        }
     }
 
     @Override

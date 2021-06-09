@@ -3,12 +3,16 @@ package tetris.scenes;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
+import tetris.Model;
 import tetris.application.Case;
 import tetris.formes.Formes;
+import tetris.save.Save;
 
 import java.util.ArrayList;
 
 public class GameScene extends BorderPane {
+    private final Model model;
+    private final Save save;
     ArrayList<Case> nouv = new ArrayList<>();
     ArrayList<Formes> formes = new ArrayList<>();
     ArrayList<Case> pose = new ArrayList<>();
@@ -18,8 +22,10 @@ public class GameScene extends BorderPane {
     public static final int COLONNES = 10;
     public static final int LIGNES = 18;
 
-    public GameScene() {
+    public GameScene(Model model) {
+        this.model = model;
         this.grille = new GridPane();
+        this.save = new Save(model.getPlayer(), 0, "", "");
         grille.setVgap(1);
         grille.setHgap(1);
         grille.setTranslateX(100);
@@ -34,6 +40,13 @@ public class GameScene extends BorderPane {
         this.getChildren().addAll(grille);
     }
 
+    public Model getModel() {
+        return model;
+    }
+
+    public Save getSave() {
+        return save;
+    }
 
     public void ajouterCase(Case ajt) {
 
@@ -129,6 +142,7 @@ public class GameScene extends BorderPane {
             grille.add(c, c.getX(), c.getY());
         }
 
+        save.incrementScore(nblignes);
 
     }
 

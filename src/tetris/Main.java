@@ -32,7 +32,7 @@ public class Main extends Application {
         homeScene.getExitButton().setOnAction(ignored -> stage.close());
         homeScene.getPlayButton().setOnAction(ignored -> {
             audio.setLoopPoint(Audio.GAME_LOOP);
-            GameScene gameScene = new GameScene();
+            GameScene gameScene = new GameScene(model);
             scene.setRoot(gameScene);
             new Jeu(gameScene, scene);
         });
