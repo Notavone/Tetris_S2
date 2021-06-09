@@ -51,7 +51,7 @@ public class Main extends Application {
         homeScene.getExitButton().setOnAction(ignored -> stage.close());
         homeScene.getPlayButton().setOnAction(ignored -> {
             audio.setLoopPoint(Audio.GAME_LOOP);
-            GameScene gameScene = new GameScene(model, scene, volumeSlider);
+            GameScene gameScene = new GameScene(model, scene, volumeSlider, audio);
             scene.setRoot(gameScene);
             stage.sizeToScene();
         });

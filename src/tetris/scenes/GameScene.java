@@ -1,14 +1,19 @@
 package tetris.scenes;
 
+import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Slider;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
+import tetris.application.Audio;
 import tetris.application.Model;
 import tetris.application.Case;
 import tetris.formes.Formes;
@@ -23,9 +28,13 @@ public class GameScene extends VBox {
     private final Model model;
     private final Save save;
     private final Text scoreField;
-    private final Text levelField;
+    private final Text completedLinesField;
     private final Text multiplicateurField;
     private final Scene scene;
+    private final Audio audio;
+    private final StackPane stackPane;
+    private final Rectangle boardShade;
+    private final BorderPane pauseCenter;
     private int linesCleared;
     ArrayList<Case> nouv = new ArrayList<>();
     ArrayList<Formes> formes = new ArrayList<>();
@@ -52,7 +61,7 @@ public class GameScene extends VBox {
     int multiplicateur;
 
 
-    public GameScene(Model model, Scene scene, Slider volumeSlider) {
+    public GameScene(Model model, Scene scene, Slider volumeSlider, Audio audio) {
         this.getStylesheets().add(Objects.requireNonNull(getClass().getResource("stylesheet.css")).toExternalForm());
 
         this.model = model;
@@ -61,6 +70,7 @@ public class GameScene extends VBox {
         grille.getStyleClass().add("grille");
         grille.getStyleClass().add("background");
 
+        this.audio = audio;
         this.save = model.getSave();
         this.linesCleared = 0;
         this.multiplicateur = 1;
@@ -86,34 +96,45 @@ public class GameScene extends VBox {
 
         scoreField = new Text(save.getScore());
         scoreField.getStyleClass().add("score");
-        levelField = new Text("0");
-        levelField.getStyleClass().add("score");
-        multiplicateurField = new Text("1");
+        completedLinesField = new Text("0");
+        completedLinesField.getStyleClass().add("score");
+        multiplicateurField = new Text("x1");
         multiplicateurField.getStyleClass().add("score");
 
         Text lblScore = new Text("Score");
         lblScore.getStyleClass().add("lbl");
-        Text lblLevel = new Text("Lignes complétées");
-        lblLevel.getStyleClass().add("lbl");
+        Text lblCompletedLines = new Text("Lignes complétées");
+        lblCompletedLines.getStyleClass().add("lbl");
         Text lblMultiplicateur = new Text("Multiplicateur");
         lblMultiplicateur.getStyleClass().add("lbl");
 
         VBox topSidePanel = new VBox();
         topSidePanel.getStyleClass().add("background");
-        topSidePanel.getChildren().addAll(scoreField, lblScore, levelField, lblLevel, multiplicateurField, lblMultiplicateur);
+        topSidePanel.getChildren().addAll(scoreField, lblScore, completedLinesField, lblCompletedLines, multiplicateurField, lblMultiplicateur);
 
         BorderPane borderPane = new BorderPane();
         borderPane.getStyleClass().add("background");
         borderPane.setTop(topSidePanel);
         borderPane.setBottom(bottomSidePanel);
 
-        StackPane stackPane = new StackPane();
-        stackPane.getChildren().add(grille);
+        stackPane = new StackPane();
+        ImageView pauseImg = new ImageView(new Image("file:icon/pause.png"));
+
+        pauseCenter = new BorderPane();
+        pauseCenter.setCenter(pauseImg);
+
+        boardShade = new Rectangle(COLONNES * 35 + 2 * (COLONNES - 1), LIGNES * 35 + 2 * (LIGNES - 1));
+        boardShade.setOpacity(0.5);
+        boardShade.setFill(Color.BLACK);
+        boardShade.toFront();
+
+        stackPane.getChildren().addAll(grille);
 
         HBox main = new HBox();
         main.getStyleClass().add("background");
         main.setPadding(new Insets(5.0));
         main.setSpacing(25.0);
+
         main.getChildren().addAll(stackPane, borderPane);
 
         this.getChildren().addAll(main);
@@ -228,8 +249,8 @@ public class GameScene extends VBox {
         multiplicateur = 1 + linesCleared / 10;
         save.incrementScore(nblignes, multiplicateur);
         scoreField.setText(save.getScore());
-        levelField.setText(String.valueOf(linesCleared));
-        multiplicateurField.setText(String.valueOf(multiplicateur));
+        completedLinesField.setText(String.valueOf(linesCleared));
+        multiplicateurField.setText("x" + multiplicateur);
     }
 
     public ArrayList<Case> nouvCases() {
@@ -303,6 +324,19 @@ public class GameScene extends VBox {
                 case SPACE -> {
                     while (!this.nouvForme().getEnBas()) {
                         this.nouvForme().bas(this);
+                    }
+                }
+                case ESCAPE -> {
+                    if (normal.getStatus() == Animation.Status.RUNNING) {
+                        stackPane.getChildren().addAll(boardShade, pauseCenter);
+                        audio.stop();
+                        normal.pause();
+                        go.pause();
+                    } else {
+                        stackPane.getChildren().removeAll(boardShade, pauseCenter);
+                        audio.play();
+                        normal.play();
+                        go.play();
                     }
                 }
             }
