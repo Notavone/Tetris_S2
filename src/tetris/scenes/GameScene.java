@@ -4,7 +4,6 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -25,8 +24,8 @@ public class GameScene extends VBox {
     private final Save save;
     private final Text scoreField;
     private final Text levelField;
+    private final Text multiplicateurField;
     private final Scene scene;
-    private int level;
     private int linesCleared;
     ArrayList<Case> nouv = new ArrayList<>();
     ArrayList<Formes> formes = new ArrayList<>();
@@ -50,6 +49,7 @@ public class GameScene extends VBox {
     boolean isSaved = false;
 
     Timeline go;
+    int multiplicateur;
 
 
     public GameScene(Model model, Scene scene, Slider volumeSlider) {
@@ -63,7 +63,7 @@ public class GameScene extends VBox {
 
         this.save = model.getSave();
         this.linesCleared = 0;
-        this.level = 1;
+        this.multiplicateur = 1;
 
         for (int i = 0; i < COLONNES; i++) {
             for (int j = 0; j < LIGNES; j++) {
@@ -86,17 +86,21 @@ public class GameScene extends VBox {
 
         scoreField = new Text(save.getScore());
         scoreField.getStyleClass().add("score");
-        levelField = new Text(String.valueOf(level));
+        levelField = new Text("0");
         levelField.getStyleClass().add("score");
+        multiplicateurField = new Text("1");
+        multiplicateurField.getStyleClass().add("score");
 
-        Text lblScore = new Text("score");
+        Text lblScore = new Text("Score");
         lblScore.getStyleClass().add("lbl");
-        Text lblLevel = new Text("niveau");
+        Text lblLevel = new Text("Lignes complétées");
         lblLevel.getStyleClass().add("lbl");
+        Text lblMultiplicateur = new Text("Multiplicateur");
+        lblMultiplicateur.getStyleClass().add("lbl");
 
         VBox topSidePanel = new VBox();
         topSidePanel.getStyleClass().add("background");
-        topSidePanel.getChildren().addAll(scoreField, lblScore, levelField, lblLevel);
+        topSidePanel.getChildren().addAll(scoreField, lblScore, levelField, lblLevel, multiplicateurField, lblMultiplicateur);
 
         BorderPane borderPane = new BorderPane();
         borderPane.getStyleClass().add("background");
@@ -127,7 +131,6 @@ public class GameScene extends VBox {
     public void ajouterCase(Case ajt) {
         grille.add(ajt, ajt.getX(), ajt.getY());
         nouv.add(ajt);
-
     }
 
     public void enleverCase(Case enl) {
@@ -169,14 +172,11 @@ public class GameScene extends VBox {
     }
 
     public void purgeLigne() {
-
         int compteur;
         int nblignes = 0;
-
         int x;
         int y;
         Color couleur;
-
         int max = 0;
 
         ArrayList<Case> provisoir = new ArrayList<>();
@@ -201,7 +201,6 @@ public class GameScene extends VBox {
                 for (Case c : provisoir) {
                     pose.remove(c);
                 }
-
             }
         }
         for (Case c : this.occupe()) {
@@ -213,6 +212,7 @@ public class GameScene extends VBox {
         for (Case c : pose) {
             grille.getChildren().remove(c);
         }
+
         for (int i = 0; i < pose.size(); i++) {
             x = pose.get(i).getX();
             y = provisoir2.contains(pose.get(i)) ? pose.get(i).getY() + nblignes : pose.get(i).getY();
@@ -225,13 +225,10 @@ public class GameScene extends VBox {
         }
 
         linesCleared += nblignes;
-        if (linesCleared >= 10) {
-            level += 1;
-            linesCleared = linesCleared - 10;
-        }
-        save.incrementScore(nblignes, level);
+        multiplicateur = 1 + linesCleared / 10;
+        save.incrementScore(nblignes, multiplicateur);
         scoreField.setText(save.getScore());
-        levelField.setText(String.valueOf(level));
+        levelField.setText(String.valueOf(linesCleared));
     }
 
     public ArrayList<Case> nouvCases() {
@@ -246,7 +243,6 @@ public class GameScene extends VBox {
         return formes.get(formes.size() - 1);
     }
 
-
     public void start() {
         form = new Formes() {
 
@@ -257,7 +253,6 @@ public class GameScene extends VBox {
         };
 
         form.createFormes(this);
-
 
         normal = new Timeline(new KeyFrame(Duration.millis(1000), ignored -> {
             if (!perdu) {
@@ -271,7 +266,6 @@ public class GameScene extends VBox {
                 FileSystem.save(Parser.stringify(this.getModel().getSaves()));
                 isSaved = true;
             }
-
         }));
         normal.setCycleCount(Timeline.INDEFINITE);
 
@@ -285,7 +279,6 @@ public class GameScene extends VBox {
         accelere.setCycleCount(Timeline.INDEFINITE);
 
         go = new Timeline(new KeyFrame(Duration.millis(100), ignored -> {
-
             if (droite) this.nouvForme().droite(this);
             if (gauche) this.nouvForme().gauche(this);
 
@@ -298,6 +291,7 @@ public class GameScene extends VBox {
             }
         }));
         go.setCycleCount(Timeline.INDEFINITE);
+        go.play();
 
         scene.setOnKeyPressed(e -> {
             switch (e.getCode()) {
@@ -320,8 +314,6 @@ public class GameScene extends VBox {
                 case S -> bas = false;
             }
         });
-
-        go.play();
 
         play = new Timeline(new KeyFrame(Duration.millis(10), ignored -> {
             if (this.nouvForme().getEnBas()) {

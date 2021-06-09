@@ -58,12 +58,12 @@ public class Save implements Comparable<Save> {
         return heure;
     }
 
-    public void incrementScore(int nbLigne, int level) {
+    public void incrementScore(int nbLigne, int multiplicateur) {
         switch (nbLigne){
-            case 1 -> score += 40 * level;
-            case 2 -> score += 100 * level;
-            case 3 -> score += 300 * level;
-            case 4 -> score += 1200 * level;
+            case 1 -> score += 40 * multiplicateur;
+            case 2 -> score += 100 * multiplicateur;
+            case 3 -> score += 300 * multiplicateur;
+            case 4 -> score += 1200 * multiplicateur;
         }
     }
 

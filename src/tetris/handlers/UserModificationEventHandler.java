@@ -54,14 +54,15 @@ public class UserModificationEventHandler implements EventHandler<ActionEvent> {
             dateText.getStyleClass().add("bold");
             Text heureText = new Text(save.getHeure());
             heureText.getStyleClass().add("bold");
-
             HBox scoreBox = new HBox(new Text((i + 1) + ". "), scoreText, new Text(" le "), dateText, new Text(" à "), heureText);
             scoreBox.getStyleClass().add("tScores");
             this.scoreBox.getChildren().add(scoreBox);
         }
 
         if (saves.size() == 0) {
-            scoreBox.getChildren().add(new HBox(new Text("Aucune sauvegarde, jouez une partie pour en créer une !")));
+            HBox box = new HBox(new Text("Aucune sauvegarde, jouez une partie pour en créer une !"));
+            box.getStyleClass().add("tScores");
+            scoreBox.getChildren().add(box);
         }
 
         stage.sizeToScene();
