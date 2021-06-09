@@ -14,10 +14,10 @@ public abstract class ControlFormes extends Verifications {
 
     public void ajouterCases(int x1, int x2, int x3, int x4, int y1, int y2, int y3, int y4, Color couleur) {
 
-        cases.add(new Case(x1, y1, couleur));
-        cases.add(new Case(x2, y2, couleur));
-        cases.add(new Case(x3, y3, couleur));
-        cases.add(new Case(x4, y4, couleur));
+        cases.add(new Case(x1, y1, couleur, false));
+        cases.add(new Case(x2, y2, couleur, false));
+        cases.add(new Case(x3, y3, couleur, false));
+        cases.add(new Case(x4, y4, couleur, false));
 
     }
 

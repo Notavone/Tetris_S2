@@ -2,11 +2,11 @@ package tetris.scenes;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.geometry.Insets;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
@@ -17,15 +17,17 @@ import tetris.save.FileSystem;
 import tetris.save.Parser;
 import tetris.save.Save;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Objects;
 
 public class GameScene extends VBox {
     private final Model model;
     private final Save save;
     private final Text scoreField;
+    private final Text levelField;
     private final Scene scene;
+    private int level;
+    private int linesCleared;
     ArrayList<Case> nouv = new ArrayList<>();
     ArrayList<Formes> formes = new ArrayList<>();
     ArrayList<Case> pose = new ArrayList<>();
@@ -51,24 +53,66 @@ public class GameScene extends VBox {
 
 
     public GameScene(Model model, Scene scene, Slider volumeSlider) {
+        this.getStylesheets().add(Objects.requireNonNull(getClass().getResource("stylesheet.css")).toExternalForm());
+
         this.model = model;
         this.scene = scene;
         this.grille = new GridPane();
-        grille.setHgap(1);
-        grille.setVgap(1);
+        grille.getStyleClass().add("grille");
+        grille.getStyleClass().add("background");
 
         this.save = model.getSave();
-        this.scoreField = new Text(save.getScore());
+        this.linesCleared = 0;
+        this.level = 1;
 
         for (int i = 0; i < COLONNES; i++) {
             for (int j = 0; j < LIGNES; j++) {
-                grille.add(new Case(i, j, Color.DARKBLUE), i, j);
+                grille.add(new Case(i, j, Color.rgb(75, 75, 75), true), i, j);
             }
         }
 
+        perduText = new Text("coucou");
+
         HBox topPanel = new HBox(new Text("Tetris"));
-        VBox bottomPanel = new VBox(new HBox(new Text("Score : "), scoreField), new HBox(new Text("Volume : "), volumeSlider));
-        this.getChildren().addAll(topPanel, grille, bottomPanel);
+        topPanel.getStyleClass().add("title");
+
+        VBox bottomSidePanel = new VBox();
+        bottomSidePanel.getStyleClass().add("background");
+        bottomSidePanel.getStyleClass().add("lbl");
+
+        Text volumeField = new Text("Volume :");
+        volumeField.getStyleClass().add("lbl");
+        bottomSidePanel.getChildren().addAll(volumeField, volumeSlider);
+
+        scoreField = new Text(save.getScore());
+        scoreField.getStyleClass().add("score");
+        levelField = new Text(String.valueOf(level));
+        levelField.getStyleClass().add("score");
+
+        Text lblScore = new Text("score");
+        lblScore.getStyleClass().add("lbl");
+        Text lblLevel = new Text("niveau");
+        lblLevel.getStyleClass().add("lbl");
+
+        VBox topSidePanel = new VBox();
+        topSidePanel.getStyleClass().add("background");
+        topSidePanel.getChildren().addAll(scoreField, lblScore, levelField, lblLevel);
+
+        BorderPane borderPane = new BorderPane();
+        borderPane.getStyleClass().add("background");
+        borderPane.setTop(topSidePanel);
+        borderPane.setBottom(bottomSidePanel);
+
+        StackPane stackPane = new StackPane();
+        stackPane.getChildren().add(grille);
+
+        HBox main = new HBox();
+        main.getStyleClass().add("background");
+        main.setPadding(new Insets(5.0));
+        main.setSpacing(25.0);
+        main.getChildren().addAll(stackPane, borderPane);
+
+        this.getChildren().addAll(main);
         start();
     }
 
@@ -125,6 +169,7 @@ public class GameScene extends VBox {
     }
 
     public void purgeLigne() {
+
         int compteur;
         int nblignes = 0;
 
@@ -134,55 +179,59 @@ public class GameScene extends VBox {
 
         int max = 0;
 
-        ArrayList<Case> temp = new ArrayList<>();
-        ArrayList<Case> temp2 = new ArrayList<>();
+        ArrayList<Case> provisoir = new ArrayList<>();
+        ArrayList<Case> provisoir2 = new ArrayList<>();
 
         for (int i = 0; i < LIGNES; i++) {
             compteur = 0;
-            temp.clear();
+            provisoir.clear();
 
             for (Case c : this.occupe()) {
                 if (c.getY() == i) {
                     compteur++;
-                    temp.add(c);
-                }
-
-                if (i > max) {
-                    max = i;
+                    provisoir.add(c);
                 }
             }
             if (compteur == COLONNES) {
+                if (i > max) {
+                    max = i;
+                }
                 nblignes++;
                 this.enleverLigne(i);
-                for (Case c : temp) {
+                for (Case c : provisoir) {
                     pose.remove(c);
                 }
+
             }
         }
-
         for (Case c : this.occupe()) {
             if (c.getY() < max) {
-                temp2.add(c);
+                provisoir2.add(c);
             }
         }
 
         for (Case c : pose) {
             grille.getChildren().remove(c);
         }
-
         for (int i = 0; i < pose.size(); i++) {
             x = pose.get(i).getX();
-            y = temp2.contains(pose.get(i)) ? pose.get(i).getY() + nblignes : pose.get(i).getY();
+            y = provisoir2.contains(pose.get(i)) ? pose.get(i).getY() + nblignes : pose.get(i).getY();
             couleur = pose.get(i).getCouleur();
-            pose.set(i, new Case(x, y, couleur));
+            pose.set(i, new Case(x, y, couleur, false));
         }
 
         for (Case c : pose) {
             grille.add(c, c.getX(), c.getY());
         }
 
-        save.incrementScore(nblignes);
+        linesCleared += nblignes;
+        if (linesCleared >= 10) {
+            level += 1;
+            linesCleared = linesCleared - 10;
+        }
+        save.incrementScore(nblignes, level);
         scoreField.setText(save.getScore());
+        levelField.setText(String.valueOf(level));
     }
 
     public ArrayList<Case> nouvCases() {
@@ -208,6 +257,7 @@ public class GameScene extends VBox {
         };
 
         form.createFormes(this);
+
 
         normal = new Timeline(new KeyFrame(Duration.millis(1000), ignored -> {
             if (!perdu) {
@@ -236,12 +286,8 @@ public class GameScene extends VBox {
 
         go = new Timeline(new KeyFrame(Duration.millis(100), ignored -> {
 
-            if (droite) {
-                this.nouvForme().droite(this);
-            }
-            if (gauche) {
-                this.nouvForme().gauche(this);
-            }
+            if (droite) this.nouvForme().droite(this);
+            if (gauche) this.nouvForme().gauche(this);
 
             if (!bas) {
                 normal.play();
@@ -250,8 +296,6 @@ public class GameScene extends VBox {
                 normal.pause();
                 accelere.play();
             }
-
-
         }));
         go.setCycleCount(Timeline.INDEFINITE);
 

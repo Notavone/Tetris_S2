@@ -40,3 +40,27 @@
 .vBoxScore {
     -fx-alignment: center;
 }
+
+.background {
+    -fx-background-color: #161616;
+}
+
+.grille {
+    -fx-vgap: 2;
+    -fx-hgap: 2;
+    -fx-padding: 2;
+}
+
+.score {
+    -fx-fill: rgb(228, 228, 228);
+    -fx-font-size: 40px;
+    -fx-font-weight: bold;
+    -fx-font-family: "Segoe UI";
+}
+
+.lbl {
+    -fx-fill: rgb(190, 190, 190);
+    -fx-font-size: 13px;
+    -fx-font-family: "Segoe UI Semilight";
+    -fx-padding: 0 0 15px 0;
+}

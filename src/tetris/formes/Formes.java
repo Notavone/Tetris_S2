@@ -16,7 +16,15 @@ public abstract class Formes extends ControlFormes{
 	 int quart = 0;
 	 boolean enBas;
 	
-	Color[] couleurs = {Color.CYAN , Color.DARKCYAN, Color.LIGHTGREEN , Color.PURPLE , Color.RED , Color.ORANGE , Color.YELLOW, Color.LIGHTGRAY};
+	Color[] couleurs = {
+			Color.rgb(248, 121, 41),
+			Color.rgb(11, 165, 223),
+			Color.rgb(192, 58, 180),
+			Color.rgb(135, 212, 47),
+			Color.rgb(215, 23, 53),
+			Color.rgb(44, 87, 220),
+			Color.rgb(251, 187, 49)
+	};
 	
 	
 	public void createFormes(GameScene plateau) {
@@ -24,7 +32,7 @@ public abstract class Formes extends ControlFormes{
 		enBas = false;
 		
 		int forme = (int) (Math.random() * (7));
-		int color = (int) (Math.random() * (8));
+		int color = (int) (Math.random() * (couleurs.length));
 
 		switch (forme) {
 			case 0 -> plateau.ajouterForm(new Barre(couleurs[color]));
