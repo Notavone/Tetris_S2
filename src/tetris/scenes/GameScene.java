@@ -188,16 +188,15 @@ public class GameScene extends VBox {
 
     public void nextFormDefine() {
         int forme = (int) (Math.random() * (7));
-        int color = (int) (Math.random() * (Formes.couleurs.length));
 
         switch (forme) {
-            case 0 -> nextForm = new Barre(Formes.couleurs[color]);
-            case 1 -> nextForm = new Carre(Formes.couleurs[color]);
-            case 2 -> nextForm = new T(Formes.couleurs[color]);
-            case 3 -> nextForm = new Z(Formes.couleurs[color]);
-            case 4 -> nextForm = new S(Formes.couleurs[color]);
-            case 5 -> nextForm = new Ldroit(Formes.couleurs[color]);
-            case 6 -> nextForm = new Lretourne(Formes.couleurs[color]);
+            case 0 -> nextForm = new Barre(this);
+            case 1 -> nextForm = new Carre(this);
+            case 2 -> nextForm = new T(this);
+            case 3 -> nextForm = new Z(this);
+            case 4 -> nextForm = new S(this);
+            case 5 -> nextForm = new Ldroit(this);
+            case 6 -> nextForm = new Lretourne(this);
         }
     }
 
@@ -302,7 +301,7 @@ public class GameScene extends VBox {
     }
 
     public void start() {
-        form = new Formes() {
+        form = new Formes(this  ) {
 
             @Override
             public ArrayList<Integer> tourne() {

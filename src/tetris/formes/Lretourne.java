@@ -5,12 +5,14 @@ import java.util.Arrays;
 import java.util.Collections;
 
 import javafx.scene.paint.Color;
+import tetris.scenes.GameScene;
 
-public class Lretourne extends Formes{
+public class Lretourne extends Formes {
 	
-    public Lretourne(Color Couleur) {	
-    	
-		this.ajouterCases(3,3,4,5,0,1,1,1,Couleur);
+    public Lretourne(GameScene plateau) {
+		super(plateau);
+		Color couleur = super.randomCouleur();
+		this.ajouterCases(3,3,4,5,0,1,1,1,couleur);
 		
 	}
 

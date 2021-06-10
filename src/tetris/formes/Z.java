@@ -5,12 +5,14 @@ import java.util.Arrays;
 import java.util.Collections;
 
 import javafx.scene.paint.Color;
+import tetris.scenes.GameScene;
 
 public class Z extends Formes {
 
-    public Z(Color Couleur) {
-
-        this.ajouterCases(3, 4, 4, 5, 0, 0, 1, 1, Couleur);
+    public Z(GameScene plateau) {
+        super(plateau);
+        Color couleur = super.randomCouleur();
+        this.ajouterCases(3, 4, 4, 5, 0, 0, 1, 1, couleur);
 
     }
 
