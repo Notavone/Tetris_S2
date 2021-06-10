@@ -24,7 +24,6 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 public class GameScene extends VBox {
-    private final Model model;
     private final Save save;
     private final Text scoreField;
     private final Text completedLinesField;
@@ -38,17 +37,13 @@ public class GameScene extends VBox {
     private final ArrayList<Case> nouv = new ArrayList<>();
     private final ArrayList<Formes> formes = new ArrayList<>();
     private final ArrayList<Case> pose = new ArrayList<>();
-    private Button menuButton;
-
     private final GridPane grille;
+    private final Button menuButton;
+    private Timeline play;
+    private Formes form;
 
     public static final int COLONNES = 10;
     public static final int LIGNES = 20;
-
-    Timeline play;
-
-    Formes form;
-
     boolean droite = false;
     boolean gauche = false;
     boolean bas = false;
@@ -56,11 +51,9 @@ public class GameScene extends VBox {
     Timeline handleDirection;
     int multiplicateur;
 
-
     public GameScene(Model model, Scene scene, Slider volumeSlider, Audio audio) {
         this.getStylesheets().add(Objects.requireNonNull(getClass().getResource("stylesheet.css")).toExternalForm());
 
-        this.model = model;
         this.scene = scene;
         this.grille = new GridPane();
         grille.getStyleClass().add("grille");
@@ -134,10 +127,6 @@ public class GameScene extends VBox {
 
         this.getChildren().addAll(main);
         start();
-    }
-
-    public Model getModel() {
-        return model;
     }
 
     public Save getSave() {
