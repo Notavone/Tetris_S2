@@ -1,4 +1,4 @@
-package tetris.application;
+package tetris.game;
 
 import tetris.save.FileSystem;
 import tetris.save.Parser;

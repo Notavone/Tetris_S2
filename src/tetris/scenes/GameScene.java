@@ -14,10 +14,10 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
-import tetris.application.Audio;
-import tetris.application.Shape;
-import tetris.application.Model;
-import tetris.application.Tetrimino;
+import tetris.game.Audio;
+import tetris.game.Shape;
+import tetris.game.Model;
+import tetris.game.Tetrimino;
 import tetris.save.Save;
 
 import java.util.ArrayList;

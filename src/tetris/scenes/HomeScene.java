@@ -9,7 +9,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
-import tetris.application.Model;
+import tetris.game.Model;
 
 import java.util.Objects;
 
@@ -68,10 +68,10 @@ public class HomeScene extends VBox {
         this.volumePanel = new HBox(lblVolume, volumeSlider);
         volumePanel.setStyle("-fx-padding: 30 0 15 10");
 
-        VBox vBoxBoutons = new VBox(playButton, exitButton, volumePanel);
-        vBoxBoutons.setAlignment(Pos.CENTER);
+        VBox buttons = new VBox(playButton, exitButton, volumePanel);
+        buttons.setAlignment(Pos.CENTER);
 
-        this.getChildren().addAll(userPane, scorePanel, vBoxBoutons);
+        this.getChildren().addAll(userPane, scorePanel, buttons);
     }
 
     public Text getUserDisplay() {

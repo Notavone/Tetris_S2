@@ -1,4 +1,4 @@
-package tetris.handlers;
+package tetris.game;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -7,7 +7,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import tetris.application.Model;
 import tetris.save.Save;
 import tetris.scenes.HomeScene;
 

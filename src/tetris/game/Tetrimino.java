@@ -1,4 +1,4 @@
-package tetris.application;
+package tetris.game;
 
 import javafx.scene.Group;
 import javafx.scene.Parent;
