@@ -5,10 +5,11 @@ import javafx.scene.Scene;
 import javafx.scene.control.Slider;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import tetris.application.Audio;
 import tetris.application.Model;
 import tetris.handlers.UserModificationEventHandler;
+import tetris.save.FileSystem;
+import tetris.save.Parser;
 import tetris.save.Save;
 import tetris.scenes.GameScene;
 import tetris.scenes.HomeScene;
@@ -52,6 +53,14 @@ public class Main extends Application {
         homeScene.getPlayButton().setOnAction(ignored -> {
             audio.setLoopPoint(Audio.GAME_LOOP);
             GameScene gameScene = new GameScene(model, scene, volumeSlider, audio);
+            gameScene.getMenuButton().setOnAction(ign -> {
+                Save.persist(model.getSaves(), model.getSave());
+                FileSystem.save(Parser.stringify(model.getSaves()));
+                UserModificationEventHandler.loadSaves(model, stage, homeScene);
+                scene.setRoot(homeScene);
+                homeScene.moveSlider(volumeSlider);
+                stage.sizeToScene();
+            });
             volumeSlider.getStyleClass().remove("sliderHome");
             volumeSlider.getStyleClass().add("sliderGame");
             scene.setRoot(gameScene);

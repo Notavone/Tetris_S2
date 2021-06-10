@@ -5,6 +5,7 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Slider;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -17,8 +18,6 @@ import tetris.application.Audio;
 import tetris.application.Model;
 import tetris.application.Case;
 import tetris.formes.Formes;
-import tetris.save.FileSystem;
-import tetris.save.Parser;
 import tetris.save.Save;
 
 import java.util.ArrayList;
@@ -36,29 +35,25 @@ public class GameScene extends VBox {
     private final Rectangle boardShade;
     private final BorderPane pauseCenter;
     private int linesCleared;
-    ArrayList<Case> nouv = new ArrayList<>();
-    ArrayList<Formes> formes = new ArrayList<>();
-    ArrayList<Case> pose = new ArrayList<>();
+    private final ArrayList<Case> nouv = new ArrayList<>();
+    private final ArrayList<Formes> formes = new ArrayList<>();
+    private final ArrayList<Case> pose = new ArrayList<>();
+    private Button menuButton;
 
-    GridPane grille;
-    GridPane previewGrid;
+    private final GridPane grille;
 
     public static final int COLONNES = 10;
     public static final int LIGNES = 20;
 
-    Boolean perdu = false;
     Timeline play;
-    Timeline normal;
-    Text perduText;
 
     Formes form;
 
     boolean droite = false;
     boolean gauche = false;
     boolean bas = false;
-    boolean isSaved = false;
 
-    Timeline go;
+    Timeline handleDirection;
     int multiplicateur;
 
 
@@ -72,9 +67,10 @@ public class GameScene extends VBox {
         grille.getStyleClass().add("background");
 
         this.audio = audio;
-        this.save = model.getSave();
+        this.save = model.createSave();
         this.linesCleared = 0;
         this.multiplicateur = 1;
+        this.menuButton = new Button("Menu");
 
         for (int i = 0; i < COLONNES; i++) {
             for (int j = 0; j < LIGNES; j++) {
@@ -82,12 +78,8 @@ public class GameScene extends VBox {
             }
         }
 
-        perduText = new Text("coucou");
-
         HBox topPanel = new HBox(new Text("Tetris"));
         topPanel.getStyleClass().add("title");
-
-        previewGrid = new GridPane();
 
         VBox bottomSidePanel = new VBox();
         bottomSidePanel.getStyleClass().add("background");
@@ -113,7 +105,7 @@ public class GameScene extends VBox {
 
         VBox topSidePanel = new VBox();
         topSidePanel.getStyleClass().add("background");
-        topSidePanel.getChildren().addAll(scoreField, lblScore, completedLinesField, lblCompletedLines, multiplicateurField, lblMultiplicateur);
+        topSidePanel.getChildren().addAll(scoreField, lblScore, completedLinesField, lblCompletedLines, multiplicateurField, lblMultiplicateur, menuButton);
 
         BorderPane borderPane = new BorderPane();
         borderPane.getStyleClass().add("background");
@@ -279,44 +271,24 @@ public class GameScene extends VBox {
 
         form.createFormes(this);
 
-        normal = new Timeline(new KeyFrame(Duration.millis(1000), ignored -> {
-            if (!perdu) {
-                this.nouvForme().bas(this);
-            } else {
-                normal.stop();
-                play.stop();
-                go.stop();
-                perduText.setVisible(true);
-                Save.persist(this.getModel().getSaves(), this.getSave());
-                FileSystem.save(Parser.stringify(this.getModel().getSaves()));
-                isSaved = true;
-            }
+        Timeline tickSlow = new Timeline(new KeyFrame(Duration.millis(1000), ignored -> {
+            if (!bas) tick();
         }));
-        normal.setCycleCount(Timeline.INDEFINITE);
+        tickSlow.setCycleCount(Timeline.INDEFINITE);
+        tickSlow.play();
 
-        Timeline accelere = new Timeline(new KeyFrame(Duration.millis(100), ignored -> {
-            if (!perdu) {
-                this.nouvForme().bas(this);
-            } else {
-                perduText.setVisible(true);
-            }
+        Timeline tickFast = new Timeline(new KeyFrame(Duration.millis(100), ignored -> {
+            if (bas) tick();
         }));
-        accelere.setCycleCount(Timeline.INDEFINITE);
+        tickFast.setCycleCount(Timeline.INDEFINITE);
+        tickFast.play();
 
-        go = new Timeline(new KeyFrame(Duration.millis(100), ignored -> {
+        handleDirection = new Timeline(new KeyFrame(Duration.millis(100), ignored -> {
             if (droite) this.nouvForme().droite(this);
             if (gauche) this.nouvForme().gauche(this);
-
-            if (!bas) {
-                normal.play();
-                accelere.pause();
-            } else {
-                normal.pause();
-                accelere.play();
-            }
         }));
-        go.setCycleCount(Timeline.INDEFINITE);
-        go.play();
+        handleDirection.setCycleCount(Timeline.INDEFINITE);
+        handleDirection.play();
 
         scene.setOnKeyPressed(e -> {
             switch (e.getCode()) {
@@ -324,22 +296,22 @@ public class GameScene extends VBox {
                 case D -> droite = true;
                 case S -> bas = true;
                 case Z -> this.nouvForme().turn(this);
-                case SPACE -> {
+                case F -> {
                     while (!this.nouvForme().getEnBas()) {
                         this.nouvForme().bas(this);
                     }
                 }
                 case ESCAPE -> {
-                    if (normal.getStatus() == Animation.Status.RUNNING) {
+                    if (tickSlow.getStatus() == Animation.Status.RUNNING) {
                         stackPane.getChildren().addAll(boardShade, pauseCenter);
                         audio.stop();
-                        normal.pause();
-                        go.pause();
+                        tickSlow.pause();
+                        handleDirection.pause();
                     } else {
                         stackPane.getChildren().removeAll(boardShade, pauseCenter);
                         audio.play();
-                        normal.play();
-                        go.play();
+                        tickSlow.play();
+                        handleDirection.play();
                     }
                 }
             }
@@ -355,18 +327,29 @@ public class GameScene extends VBox {
 
         play = new Timeline(new KeyFrame(Duration.millis(10), ignored -> {
             if (this.nouvForme().getEnBas()) {
-                go.stop();
+                handleDirection.stop();
                 this.nouvForme().remet();
                 this.FinDeDescente();
                 this.purgeLigne();
                 form.createFormes(this);
                 if (form.occupeBas(this)) {
-                    perdu = true;
+                    play.stop();
+                    handleDirection.stop();
+                    tickSlow.stop();
+                    tickFast.stop();
                 }
-                go.play();
+                handleDirection.play();
             }
         }));
         play.setCycleCount(Timeline.INDEFINITE);
         play.play();
+    }
+
+    public Button getMenuButton() {
+        return menuButton;
+    }
+
+    private void tick() {
+        this.nouvForme().bas(this);
     }
 }

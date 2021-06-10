@@ -12,6 +12,7 @@ public class Model {
     private static final String DEFAULT_PLAYER = "?";
     private final List<Save> saves;
     private String player;
+    private Save save;
 
     public Model() {
         this.saves = Parser.parse(FileSystem.load());
@@ -34,10 +35,16 @@ public class Model {
         return Save.filterByUserName(saves, player);
     }
 
-    public Save getSave() {
+    public Save createSave() {
         Date date = new Date();
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
-        return new Save(player, 0, dateFormat.format(date), timeFormat.format(date));
+        Save save = new Save(player, 0, dateFormat.format(date), timeFormat.format(date));
+        this.save = save;
+        return save;
+    }
+
+    public Save getSave() {
+        return this.save;
     }
 }

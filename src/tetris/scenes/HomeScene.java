@@ -21,11 +21,13 @@ public class HomeScene extends VBox {
     private final Button confirmUserChangeButton;
     private final Button playButton;
     private final Button exitButton;
+    private Slider volumeSlider;
 
     public HomeScene(Model model, Slider volumeSlider) {
         this.getStylesheets().add(Objects.requireNonNull(getClass().getResource("stylesheet.css")).toExternalForm());
         getStyleClass().add("background");
 
+        this.volumeSlider = volumeSlider;
         this.userDisplay = new Text(model.getPlayer());
         userDisplay.getStyleClass().add("lbl");
         this.scorePanel = new VBox();
@@ -101,5 +103,9 @@ public class HomeScene extends VBox {
 
     public Button getExitButton() {
         return exitButton;
+    }
+
+    public void moveSlider(Slider volumeSlider) {
+        this.volumeSlider = volumeSlider;
     }
 }

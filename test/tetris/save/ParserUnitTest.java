@@ -22,6 +22,6 @@ public class ParserUnitTest {
         List<Save> saves = Arrays.asList(s, s);
         String data = Parser.stringify(saves);
 
-        Assert.assertEquals("{saves:[{name: \"\", score: 0.0, date: \"\", heure: \"\"},{name: \"\", score: 0.0², date: \"\", heure: \"\"}]}", data);
+        Assert.assertEquals("{saves:[{name: \"\", score: 0.0, date: \"\", heure: \"\"},{name: \"\", score: 0.0, date: \"\", heure: \"\"}]}", data);
     }
 }
