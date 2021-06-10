@@ -19,9 +19,9 @@ public abstract class Shape {
     };
 
     ArrayList<Tetrimino> tetriminos = new ArrayList<>();
-    protected int quartTour = 0;
+    private int actualTurnState = 0;
 
-    public void ajouterCases(int x1, int x2, int x3, int x4, int y1, int y2, int y3, int y4, Color color) {
+    public void addTetrimino(int x1, int x2, int x3, int x4, int y1, int y2, int y3, int y4, Color color) {
         tetriminos.add(new Tetrimino(x1, y1, color, false));
         tetriminos.add(new Tetrimino(x2, y2, color, false));
         tetriminos.add(new Tetrimino(x3, y3, color, false));
@@ -36,11 +36,11 @@ public abstract class Shape {
         tetriminos.set(i, tetrimino);
     }
 
-    public void ajtQuart() {
-        if (quartTour == 3) {
-            quartTour = 0;
+    public void incrementTurnState() {
+        if (actualTurnState == 3) {
+            actualTurnState = 0;
         } else {
-            quartTour++;
+            actualTurnState++;
         }
     }
 
@@ -101,8 +101,8 @@ public abstract class Shape {
             }
 
             coord.clear();
-            ajtQuart();
-            grid.lastShape().setTurnState(quartTour);
+            incrementTurnState();
+            grid.lastShape().setTurnState(actualTurnState);
         }
 
 
@@ -227,7 +227,7 @@ public abstract class Shape {
         public LineShape() {
             super();
             Color color = super.randomColor();
-            this.ajouterCases(3, 4, 5, 6, 0, 0, 0, 0, color);
+            this.addTetrimino(3, 4, 5, 6, 0, 0, 0, 0, color);
         }
 
         @Override
@@ -249,7 +249,7 @@ public abstract class Shape {
         public SquareShape() {
             super();
             Color color = super.randomColor();
-            this.ajouterCases(4, 4, 5, 5, 0, 1, 0, 1, color);
+            this.addTetrimino(4, 4, 5, 5, 0, 1, 0, 1, color);
         }
 
         @Override
@@ -263,7 +263,7 @@ public abstract class Shape {
         public LShape() {
             super();
             Color color = super.randomColor();
-            this.ajouterCases(3, 4, 5, 5, 1, 1, 1, 0, color);
+            this.addTetrimino(3, 4, 5, 5, 1, 1, 1, 0, color);
 
         }
 
@@ -285,7 +285,7 @@ public abstract class Shape {
         public ReversedLShape() {
             super();
             Color color = super.randomColor();
-            this.ajouterCases(3, 3, 4, 5, 0, 1, 1, 1, color);
+            this.addTetrimino(3, 3, 4, 5, 0, 1, 1, 1, color);
 
         }
 
@@ -307,7 +307,7 @@ public abstract class Shape {
         public SShape() {
             super();
             Color color = super.randomColor();
-            this.ajouterCases(3, 4, 4, 5, 1, 1, 0, 0, color);
+            this.addTetrimino(3, 4, 4, 5, 1, 1, 0, 0, color);
 
         }
 
@@ -330,7 +330,7 @@ public abstract class Shape {
         public TShape() {
             super();
             Color color = super.randomColor();
-            this.ajouterCases(3, 4, 5, 4, 1, 1, 1, 0, color);
+            this.addTetrimino(3, 4, 5, 4, 1, 1, 1, 0, color);
 
         }
 
@@ -353,7 +353,7 @@ public abstract class Shape {
         public ZShape() {
             super();
             Color color = super.randomColor();
-            this.ajouterCases(3, 4, 4, 5, 0, 0, 1, 1, color);
+            this.addTetrimino(3, 4, 4, 5, 0, 0, 1, 1, color);
 
         }
 
