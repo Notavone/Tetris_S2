@@ -71,7 +71,7 @@
     -fx-background-color: #161616;
 }
 
-.grille {
+.grid {
     -fx-vgap: 2;
     -fx-hgap: 2;
     -fx-padding: 2;

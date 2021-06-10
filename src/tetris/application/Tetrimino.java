@@ -9,19 +9,18 @@ import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
 import tetris.scenes.GameScene;
 
-public class Case extends Parent{
+public class Tetrimino extends Parent{
+	private int x;
+	private int y;
+	private final Color color;
 
-	private int emplacementX;
-	private int emplacementY;
-	private final Color couleur;
+	public Tetrimino(int X, int Y, Color color, boolean isBackground) {
 
-	public Case(int X, int Y, Color couleur, boolean isBackground) {
-
-		this.couleur = couleur;
+		this.color = color;
 		int size = 35;
 
-		emplacementX = X;
-		emplacementY = Y;
+		this.x = X;
+		this.y = Y;
 
 		Group cellGroup = new Group();
 
@@ -29,16 +28,16 @@ public class Case extends Parent{
 		Polygon topShade = new Polygon();
 		Polygon bottomShade = new Polygon();
 
-		double ombreSize = (double) size / 7.5;
+		double shadeSize = (double) size / 7.5;
 
 		if (!isBackground) {
 			topShade.setOpacity(0.5);
 			topShade.setFill(Color.WHITE);
 			topShade.getPoints().addAll(0.0, 0.0,
 					(double) size, 0.0,
-					(double) size - ombreSize, ombreSize,
-					ombreSize, ombreSize,
-					ombreSize, (double) size - ombreSize,
+					(double) size - shadeSize, shadeSize,
+					shadeSize, shadeSize,
+					shadeSize, (double) size - shadeSize,
 					0.0, (double) size);
 
 			bottomShade.setOpacity(0.5);
@@ -46,11 +45,11 @@ public class Case extends Parent{
 			bottomShade.getPoints().addAll(0.0, (double) size,
 					(double) size, (double) size,
 					(double) size, 0.0,
-					(double) size - ombreSize, ombreSize,
-					(double) size - ombreSize, (double) size - ombreSize,
-					ombreSize, (double) size - ombreSize);
+					(double) size - shadeSize, shadeSize,
+					(double) size - shadeSize, (double) size - shadeSize,
+					shadeSize, (double) size - shadeSize);
 
-			square.setFill(couleur);
+			square.setFill(color);
 
 			cellGroup.getChildren().addAll(square, topShade, bottomShade);
 		} else {
@@ -58,9 +57,9 @@ public class Case extends Parent{
 			topShade.setFill(Color.BLACK);
 			topShade.getPoints().addAll(0.0, 0.0,
 					(double) size, 0.0,
-					(double) size - ombreSize, ombreSize,
-					ombreSize, ombreSize,
-					ombreSize, (double) size - ombreSize,
+					(double) size - shadeSize, shadeSize,
+					shadeSize, shadeSize,
+					shadeSize, (double) size - shadeSize,
 					0.0, (double) size);
 
 			bottomShade.setOpacity(0.25);
@@ -68,9 +67,9 @@ public class Case extends Parent{
 			bottomShade.getPoints().addAll(0.0, (double) size,
 					(double) size, (double) size,
 					(double) size, 0.0,
-					(double) size - ombreSize, ombreSize,
-					(double) size - ombreSize, (double) size - ombreSize,
-					ombreSize, (double) size - ombreSize);
+					(double) size - shadeSize, shadeSize,
+					(double) size - shadeSize, (double) size - shadeSize,
+					shadeSize, (double) size - shadeSize);
 
 			Rectangle topRec = new Rectangle(size, size / 2.65);
 			topRec.setOpacity(0.05);
@@ -82,8 +81,8 @@ public class Case extends Parent{
 			halfCircle.setType(ArcType.ROUND);
 			halfCircle.setRotate(180.0);
 
-			square.setFill(couleur);
-			square.setOpacity((55.0 / 62.0 - ((double) Y + 30.0) / ((double) GameScene.LIGNES + 50)));
+			square.setFill(color);
+			square.setOpacity((55.0 / 62.0 - ((double) Y + 30.0) / ((double) GameScene.LINES + 50)));
 
 			cellGroup.getChildren().addAll(square, topShade, bottomShade, halfCircle, topRec);
 		}
@@ -91,28 +90,23 @@ public class Case extends Parent{
 		this.getChildren().add(cellGroup);
 	}
 
-	public Color getCouleur() {
-		return couleur;
+	public Color getColor() {
+		return color;
 	}
 
 	public int getX() {
-		return emplacementX;
+		return x;
 	}
 
 	public int getY() {
-		return emplacementY;
+		return y;
 	}
 
-
-
-
-	public void setEmplacementX(int x) {
-		this.emplacementX = x;
+	public void setX(int x) {
+		this.x = x;
 	}
 
-	public void setEmplacementY(int y) {
-		this.emplacementY = y;
+	public void setY(int y) {
+		this.y = y;
 	}
-
-
 }
