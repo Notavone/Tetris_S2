@@ -6,11 +6,23 @@
     -fx-border-insets: 5px;
     -fx-background-insets: 5px;
     -fx-min-width: 300px;
+    -fx-effect: dropshadow(three-pass-box, rgb(18, 49, 90), 8, 0, 0, 0);
+}
+
+.btnMain {
+    -fx-background-color: rgb(40, 96, 177);
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-padding: 10 15 10 15;
+    -fx-border-insets: 5px;
+    -fx-background-insets: 5px;
+    -fx-effect: dropshadow(three-pass-box, rgb(18, 49, 90), 8, 0, 0, 0);
 }
 
 .btnUser {
     -fx-background-color: rgb(40, 96, 177);
-    -fx-text-fill: rgb(255, 255, 255)
+    -fx-text-fill: rgb(255, 255, 255);
+    -fx-effect: dropshadow(three-pass-box, rgb(18, 49, 90), 8, 0, 0, 0);
 }
 
 .lblBold {

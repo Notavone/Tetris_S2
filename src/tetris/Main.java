@@ -57,6 +57,7 @@ public class Main extends Application {
                 Save.persist(model.getSaves(), model.getSave());
                 FileSystem.save(Parser.stringify(model.getSaves()));
                 UserModificationEventHandler.loadSaves(model, stage, homeScene);
+                audio.play();
                 homeScene.moveVolumeSlider(volumeSlider);
                 scene.setRoot(homeScene);
                 stage.sizeToScene();

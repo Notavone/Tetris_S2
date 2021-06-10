@@ -16,7 +16,7 @@ public abstract class Formes extends ControlFormes{
 	 int quart = 0;
 	 boolean enBas;
 	
-	Color[] couleurs = {
+	public static Color[] couleurs = {
 			Color.rgb(248, 121, 41),
 			Color.rgb(11, 165, 223),
 			Color.rgb(192, 58, 180),
@@ -30,19 +30,25 @@ public abstract class Formes extends ControlFormes{
 	public void createFormes(GameScene plateau) {
 		
 		enBas = false;
-		
-		int forme = (int) (Math.random() * (7));
-		int color = (int) (Math.random() * (couleurs.length));
 
-		switch (forme) {
-			case 0 -> plateau.ajouterForm(new Barre(couleurs[color]));
-			case 1 -> plateau.ajouterForm(new Carre(couleurs[color]));
-			case 2 -> plateau.ajouterForm(new T(couleurs[color]));
-			case 3 -> plateau.ajouterForm(new Z(couleurs[color]));
-			case 4 -> plateau.ajouterForm(new S(couleurs[color]));
-			case 5 -> plateau.ajouterForm(new Ldroit(couleurs[color]));
-			case 6 -> plateau.ajouterForm(new Lretourne(couleurs[color]));
+		if (plateau.occupe().isEmpty()) {
+			int forme = (int) (Math.random() * (7));
+			int color = (int) (Math.random() * (couleurs.length));
+
+			switch (forme) {
+				case 0 -> plateau.ajouterForm(new Barre(couleurs[color]));
+				case 1 -> plateau.ajouterForm(new Carre(couleurs[color]));
+				case 2 -> plateau.ajouterForm(new T(couleurs[color]));
+				case 3 -> plateau.ajouterForm(new Z(couleurs[color]));
+				case 4 -> plateau.ajouterForm(new S(couleurs[color]));
+				case 5 -> plateau.ajouterForm(new Ldroit(couleurs[color]));
+				case 6 -> plateau.ajouterForm(new Lretourne(couleurs[color]));
+			}
+		} else {
+			plateau.ajouterForm(plateau.getNextForm());
 		}
+
+
 		
 	}
 	

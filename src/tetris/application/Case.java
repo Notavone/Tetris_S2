@@ -16,39 +16,39 @@ public class Case extends Parent{
 	private final Color couleur;
 
 	public Case(int X, int Y, Color couleur, boolean isBackground) {
-		
+
 		this.couleur = couleur;
-		int PIXEL = 35;
-		
+		int size = 35;
+
 		emplacementX = X;
 		emplacementY = Y;
 
 		Group cellGroup = new Group();
 
-		Rectangle square = new Rectangle(PIXEL, PIXEL);
+		Rectangle square = new Rectangle(size, size);
 		Polygon topShade = new Polygon();
 		Polygon bottomShade = new Polygon();
 
-		double shadeThick = (double) PIXEL / 7.5;
+		double ombreSize = (double) size / 7.5;
 
 		if (!isBackground) {
 			topShade.setOpacity(0.5);
 			topShade.setFill(Color.WHITE);
 			topShade.getPoints().addAll(0.0, 0.0,
-					(double) PIXEL, 0.0,
-					(double) PIXEL - shadeThick, shadeThick,
-					shadeThick, shadeThick,
-					shadeThick, (double) PIXEL - shadeThick,
-					0.0, (double) PIXEL);
+					(double) size, 0.0,
+					(double) size - ombreSize, ombreSize,
+					ombreSize, ombreSize,
+					ombreSize, (double) size - ombreSize,
+					0.0, (double) size);
 
 			bottomShade.setOpacity(0.5);
 			bottomShade.setFill(Color.BLACK);
-			bottomShade.getPoints().addAll(0.0, (double) PIXEL,
-					(double) PIXEL, (double) PIXEL,
-					(double) PIXEL, 0.0,
-					(double) PIXEL - shadeThick, shadeThick,
-					(double) PIXEL - shadeThick, (double) PIXEL - shadeThick,
-					shadeThick, (double) PIXEL - shadeThick);
+			bottomShade.getPoints().addAll(0.0, (double) size,
+					(double) size, (double) size,
+					(double) size, 0.0,
+					(double) size - ombreSize, ombreSize,
+					(double) size - ombreSize, (double) size - ombreSize,
+					ombreSize, (double) size - ombreSize);
 
 			square.setFill(couleur);
 
@@ -57,26 +57,26 @@ public class Case extends Parent{
 			topShade.setOpacity(0.1);
 			topShade.setFill(Color.BLACK);
 			topShade.getPoints().addAll(0.0, 0.0,
-					(double) PIXEL, 0.0,
-					(double) PIXEL - shadeThick, shadeThick,
-					shadeThick, shadeThick,
-					shadeThick, (double) PIXEL - shadeThick,
-					0.0, (double) PIXEL);
+					(double) size, 0.0,
+					(double) size - ombreSize, ombreSize,
+					ombreSize, ombreSize,
+					ombreSize, (double) size - ombreSize,
+					0.0, (double) size);
 
 			bottomShade.setOpacity(0.25);
 			bottomShade.setFill(Color.BLACK);
-			bottomShade.getPoints().addAll(0.0, (double) PIXEL,
-					(double) PIXEL, (double) PIXEL,
-					(double) PIXEL, 0.0,
-					(double) PIXEL - shadeThick, shadeThick,
-					(double) PIXEL - shadeThick, (double) PIXEL - shadeThick,
-					shadeThick, (double) PIXEL - shadeThick);
+			bottomShade.getPoints().addAll(0.0, (double) size,
+					(double) size, (double) size,
+					(double) size, 0.0,
+					(double) size - ombreSize, ombreSize,
+					(double) size - ombreSize, (double) size - ombreSize,
+					ombreSize, (double) size - ombreSize);
 
-			Rectangle topRec = new Rectangle(PIXEL, PIXEL / 2.65);
+			Rectangle topRec = new Rectangle(size, size / 2.65);
 			topRec.setOpacity(0.05);
 			topRec.setFill(Color.WHITE);
 
-			Arc halfCircle = new Arc((double) PIXEL / 2.0, (double) PIXEL / 2.0, (double) PIXEL / 2.0, (double) PIXEL / 8.0, 0.0f, 180.0f);
+			Arc halfCircle = new Arc((double) size / 2.0, (double) size / 2.0, (double) size / 2.0, (double) size / 8.0, 0.0f, 180.0f);
 			halfCircle.setOpacity(0.05);
 			halfCircle.setFill(Color.WHITE);
 			halfCircle.setType(ArcType.ROUND);
@@ -90,11 +90,11 @@ public class Case extends Parent{
 
 		this.getChildren().add(cellGroup);
 	}
-	
+
 	public Color getCouleur() {
-		return couleur;	
+		return couleur;
 	}
-	
+
 	public int getX() {
 		return emplacementX;
 	}
@@ -102,17 +102,17 @@ public class Case extends Parent{
 	public int getY() {
 		return emplacementY;
 	}
-	
-	
-	
-	
+
+
+
+
 	public void setEmplacementX(int x) {
 		this.emplacementX = x;
 	}
-	
+
 	public void setEmplacementY(int y) {
 		this.emplacementY = y;
 	}
-	
-	
+
+
 }

@@ -17,7 +17,7 @@ import javafx.util.Duration;
 import tetris.application.Audio;
 import tetris.application.Model;
 import tetris.application.Case;
-import tetris.formes.Formes;
+import tetris.formes.*;
 import tetris.save.Save;
 
 import java.util.ArrayList;
@@ -32,15 +32,18 @@ public class GameScene extends VBox {
     private final Audio audio;
     private final StackPane stackPane;
     private final Rectangle boardShade;
-    private final BorderPane pauseCenter;
+    private final BorderPane pauseCenter, gameOverCenter;
     private int linesCleared;
     private final ArrayList<Case> nouv = new ArrayList<>();
     private final ArrayList<Formes> formes = new ArrayList<>();
     private final ArrayList<Case> pose = new ArrayList<>();
+    private final ArrayList<Case> nextFormList = new ArrayList<>();
     private final GridPane grille;
+    private final GridPane previewGrille;
     private final Button menuButton;
     private Timeline play;
     private Formes form;
+    private Formes nextForm;
 
     public static final int COLONNES = 10;
     public static final int LIGNES = 20;
@@ -59,11 +62,17 @@ public class GameScene extends VBox {
         grille.getStyleClass().add("grille");
         grille.getStyleClass().add("background");
 
+        previewGrille = new GridPane();
+        previewGrille.getStyleClass().add("grille");
+        for (int i = 0; i < 4; i++) {
+            previewGrille.add(new Rectangle(35, 35, Color.TRANSPARENT), i, 0);
+        }
+        previewGrille.setStyle("-fx-padding: 25 15 10 0;");
+
         this.audio = audio;
         this.save = model.createSave();
         this.linesCleared = 0;
         this.multiplicateur = 1;
-        this.menuButton = new Button("Menu");
 
         for (int i = 0; i < COLONNES; i++) {
             for (int j = 0; j < LIGNES; j++) {
@@ -96,9 +105,15 @@ public class GameScene extends VBox {
         Text lblMultiplicateur = new Text("Multiplicateur");
         lblMultiplicateur.getStyleClass().add("lbl");
 
+        Text lblNextForm = new Text("Pièce suivante");
+        lblNextForm.getStyleClass().add("lbl");
+
+        menuButton = new Button("Menu principal");
+        menuButton.getStyleClass().add("btnMain");
+
         VBox topSidePanel = new VBox();
         topSidePanel.getStyleClass().add("background");
-        topSidePanel.getChildren().addAll(scoreField, lblScore, completedLinesField, lblCompletedLines, multiplicateurField, lblMultiplicateur, menuButton);
+        topSidePanel.getChildren().addAll(menuButton, scoreField, lblScore, completedLinesField, lblCompletedLines, multiplicateurField, lblMultiplicateur, previewGrille, lblNextForm);
 
         BorderPane borderPane = new BorderPane();
         borderPane.getStyleClass().add("background");
@@ -107,9 +122,13 @@ public class GameScene extends VBox {
 
         stackPane = new StackPane();
         ImageView pauseImg = new ImageView(new Image("file:icon/pause.png"));
+        ImageView gameOverImg = new ImageView(new Image("file:icon/gameover.png"));
 
         pauseCenter = new BorderPane();
         pauseCenter.setCenter(pauseImg);
+
+        gameOverCenter = new BorderPane();
+        gameOverCenter.setCenter(gameOverImg);
 
         boardShade = new Rectangle(COLONNES * 35 + 2 * (COLONNES - 1), LIGNES * 35 + 2 * (LIGNES - 1));
         boardShade.setOpacity(0.5);
@@ -151,6 +170,39 @@ public class GameScene extends VBox {
             this.ajouterCase(form.getCase(i));
         }
 
+        nextFormDefine();
+        nextForm(nextForm);
+    }
+
+    public void nextForm(Formes form) {
+        for (Case x : nextFormList) {
+            previewGrille.getChildren().remove(x);
+        }
+        nextFormList.clear();
+
+        for (int i = 0; i < 4; i++) {
+            nextFormList.add(form.getCase(i));
+            previewGrille.add(form.getCase(i), form.getCase(i).getX() - 3, form.getCase(i).getY());
+        }
+    }
+
+    public void nextFormDefine() {
+        int forme = (int) (Math.random() * (7));
+        int color = (int) (Math.random() * (Formes.couleurs.length));
+
+        switch (forme) {
+            case 0 -> nextForm = new Barre(Formes.couleurs[color]);
+            case 1 -> nextForm = new Carre(Formes.couleurs[color]);
+            case 2 -> nextForm = new T(Formes.couleurs[color]);
+            case 3 -> nextForm = new Z(Formes.couleurs[color]);
+            case 4 -> nextForm = new S(Formes.couleurs[color]);
+            case 5 -> nextForm = new Ldroit(Formes.couleurs[color]);
+            case 6 -> nextForm = new Lretourne(Formes.couleurs[color]);
+        }
+    }
+
+    public Formes getNextForm() {
+        return nextForm;
     }
 
     public void enleverLigne(int y) {
@@ -326,6 +378,8 @@ public class GameScene extends VBox {
                     handleDirection.stop();
                     tickSlow.stop();
                     tickFast.stop();
+                    stackPane.getChildren().addAll(boardShade, gameOverCenter);
+                    audio.stop();
                 }
                 handleDirection.play();
             }
