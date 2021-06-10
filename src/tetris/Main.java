@@ -59,6 +59,8 @@ public class Main extends Application {
                 UserModificationEventHandler.loadSaves(model, stage, homeScene);
                 audio.play();
                 homeScene.moveVolumeSlider(volumeSlider);
+                volumeSlider.getStyleClass().remove("sliderGame");
+                volumeSlider.getStyleClass().add("sliderHome");
                 scene.setRoot(homeScene);
                 stage.sizeToScene();
             });
